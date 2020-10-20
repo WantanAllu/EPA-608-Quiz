@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/css/foundation.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <style>
+        body {
+            line-height: 1;
+        }
         .answers-div label {
             display: inline;
         }
@@ -14,9 +17,14 @@
             border-radius: 3px;
         }
         .subdued-text {
-            line-height: 2;
+            line-height: 1;
             color: #515151;
             font-size: 0.7em;
+        }
+        #answer-feedback p {
+            font-weight: 600;
+            margin-bottom: 2px;
+            line-height: 1.2;
         }
         #answer-feedback .wrong {
             color: #801010;
@@ -28,7 +36,7 @@
             margin: 1px;
         }
         .menu a {
-            padding: 0.2rem 1px;
+            padding: 0.2rem 0px;
         }
         .answers-div input[type="radio"]:checked + label {
             font-weight: bold;
@@ -47,10 +55,7 @@
             display: inline;
         }
         hr {
-            margin: 0px 0;
-        }
-        #answer-feedback p {
-            margin-bottom: 2px;
+            margin: 0;
         }
         #question {
             margin-bottom: 2px;
@@ -60,6 +65,9 @@
         }
         .next-button-group {
             margin-bottom: 0.1rem;
+        }
+        #next {
+            padding: .5em 1em;
         }
         #prev {
             margin: 0;
@@ -138,6 +146,7 @@
                             <label for="include-type3">TYPE III</label>
                         </span>
                     </div>
+                    <br>
                     <a href="#" class="button radius" id="new-quiz-study">Study Mode</a>
                     <a href="#" class="success button radius" id="new-quiz-test">Test Mode</a>
                 </div>
@@ -242,6 +251,7 @@
                         $('#D').prop('checked', true);
                         break;
                 }
+                //checkAnswer(offset);
             }
             if (reviewMode) {
                 $("input[name=answer]").each(function(val) {
@@ -265,6 +275,14 @@
             return true;
         }
 
+        function setAnswerFeedback(feedback) {
+            $('#answer-feedback').html(feedback);
+        }
+
+        function clearAnswerFeedback() {
+            setAnswerFeedback("<p>&nbsp;</p>");
+        }
+
         function checkAnswer() {
             var answer = $('input[name=answer]:checked').val();
             if (answer == undefined) {
@@ -274,18 +292,19 @@
 
             if (reviewMode) {
                 if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
-                    $('#answer-feedback').html('<p class="wrong">Wrong answer!</p><p class="wrong">The correct answer is "' + questions[currentQuestionOffset]['correct_answer'] + '"</p>');
+                    setAnswerFeedback('<p class="wrong">Wrong answer!</p><p class="wrong">The correct answer is "' + questions[currentQuestionOffset]['correct_answer'] + '"</p>');
                     return true;
                 }
-                $('#answer-feedback').html('<p class="correct">Correct!</p>');
+                setAnswerFeedback('<p class="correct">Correct!</p>');
             }
 
             if (studyMode) {
                 if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
-                    $('#answer-feedback').html('<p class="wrong">Wrong answer!</p>');
+                    setAnswerFeedback('<p class="wrong">Wrong answer!</p>');
+                    selectedAnswers[currentQuestionOffset] = answer;
                     return false;
                 }
-                $('#answer-feedback').html("<p>&nbsp;</p>");
+                clearAnswerFeedback();
             }
             selectedAnswers[currentQuestionOffset] = answer;
             return true;
@@ -338,7 +357,7 @@
             $('#quiz-summary').hide();
             $('#quiz-options').show();
             $('#time-left').hide();
-            $('#answer-feedback').html("<p>&nbsp;</p>");
+            clearAnswerFeedback();
         }
 
         function getFiltersSelected() {
@@ -408,6 +427,7 @@
                 if (currentQuestionOffset < 0) {
                     currentQuestionOffset = 0;
                 }
+                clearAnswerFeedback();
                 setQuestion(currentQuestionOffset);
             });
             $('#next').click(function () {
@@ -419,6 +439,11 @@
                         gradeQuestions();
                     }
                 }
+            });
+            $('input[type=radio][name=answer]').change(function() {
+                clearAnswerFeedback();
+                var answer = $('input[name=answer]:checked').val();
+                selectedAnswers[currentQuestionOffset] = answer;
             });
             $('#review-questions').click(function() {
                 reviewMode = true;
