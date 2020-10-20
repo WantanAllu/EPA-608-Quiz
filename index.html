@@ -2,6 +2,7 @@
 <html>
 <head>    
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
     <title>EPA 608 Quiz</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/css/foundation.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
@@ -35,16 +36,29 @@
         .answers-div input[type="radio"]:checked + label {
             font-weight: bold;
         }
+        .title {
+            display: inline;
+        }
+        .menu {
+            display: inline;
+            margin: 0px 2em;
+        }
+        .menu a {
+            display: inline;
+        }
+        .menu .button {
+            display: inline;
+        }
+        hr {
+            margin: 0.5em 0;
+        }
     </style>
 </head>
 <body>
     <div class="grid-container">
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
-                <h1>EPA 608 Quiz</h1>
-                <ul class="menu">
-                    <li><a href="#" class="new-quiz-button">New Quiz</a></li>
-                </ul>
+                <h2 class="title">EPA 608 Quiz</h2> <span class="menu"><a href="#" class="radius button new-quiz-button">New Quiz</a></span>
             </div>
         </div>
         <hr />
@@ -80,7 +94,6 @@
                             </div>
                         </div>
                     </div>
-                    <br />
                     <div class="grid-x grid-padding-x">
                         <div class="large-12 cell">
                             <div class="text-center" id="answer-feedback"></div>
@@ -251,15 +264,15 @@
 
             if (reviewMode) {
                 if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
-                    $('#answer-feedback').html('<h3 class="wrong">Wrong answer!</h3><p class="wrong">The correct answer is "' + questions[currentQuestionOffset]['correct_answer'] + '"</p>');
+                    $('#answer-feedback').html('<h4 class="wrong">Wrong answer!</h4><p class="wrong">The correct answer is "' + questions[currentQuestionOffset]['correct_answer'] + '"</p>');
                     return true;
                 }
-                $('#answer-feedback').html('<h3 class="correct">Correct!</h3>');
+                $('#answer-feedback').html('<h4 class="correct">Correct!</h4>');
             }
 
             if (studyMode) {
                 if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
-                    $('#answer-feedback').html('<h3 class="wrong">Wrong answer!</h3>');
+                    $('#answer-feedback').html('<h4 class="wrong">Wrong answer!</h4>');
                     return false;
                 }
                 $('#answer-feedback').html("");
