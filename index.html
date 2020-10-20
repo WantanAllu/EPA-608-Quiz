@@ -58,6 +58,12 @@
         .title {
             font-size: 1.125rem;
         }
+        .next-button-group {
+            margin-bottom: 0.1rem;
+        }
+        #prev {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -103,13 +109,11 @@
                     <div class="grid-x grid-padding-x">
                         <div class="large-12 cell">
                             <div class="text-center" id="answer-feedback"><p>&nbsp;</p></div>
-                            <div class="expanded button-group">
+                            <div class="expanded button-group next-button-group">
                                 <a href="#" class="button radius next-prev" id="next">Next <i class="fas fa-arrow-right"></i></a>
                             </div>
-                            <p class="text-center" id="question-number"></p>
-                            <div class="button-group">
-                                <a href="#" class="alert button radius next-prev clear" id="prev"><i class="fas fa-arrow-left"></i> Prev</a>
-                            </div>
+                            <div class="text-center subdued-text" id="question-number"></div>
+                            <a href="#" class="small alert button radius next-prev clear" id="prev"><i class="fas fa-arrow-left"></i> Prev</a>
                         </div>
                     </div>
                 </form>
@@ -222,7 +226,7 @@
             $('#answerB').text(questionObj['answers'][1]);
             $('#answerC').text(questionObj['answers'][2]);
             $('#answerD').text(questionObj['answers'][3]);
-            $('#question-number').text("Question number " + (offset+1) + " of " + questions.length);
+            $('#question-number').text("Question " + (offset+1) + "/" + questions.length);
             if (selectedAnswers.length > offset) {
                 switch (selectedAnswers[offset]) {
                     case '0':
