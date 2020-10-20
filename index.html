@@ -13,9 +13,6 @@
         .radius {
             border-radius: 3px;
         }
-        #question {
-            margin-top: 0.4rem;
-        }
         .subdued-text {
             line-height: 2;
             color: #515151;
@@ -50,7 +47,13 @@
             display: inline;
         }
         hr {
-            margin: 0.5em 0;
+            margin: 0px 0;
+        }
+        #answer-feedback p {
+            margin-bottom: 2px;
+        }
+        #question {
+            margin-bottom: 2px;
         }
     </style>
 </head>
@@ -96,7 +99,7 @@
                     </div>
                     <div class="grid-x grid-padding-x">
                         <div class="large-12 cell">
-                            <div class="text-center" id="answer-feedback"><h4>&nbsp;</h4></div>
+                            <div class="text-center" id="answer-feedback"><p>&nbsp;</p></div>
                             <div class="expanded button-group">
                                 <a href="#" class="button radius next-prev" id="next">Next <i class="fas fa-arrow-right"></i></a>
                             </div>
@@ -264,18 +267,18 @@
 
             if (reviewMode) {
                 if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
-                    $('#answer-feedback').html('<h4 class="wrong">Wrong answer!</h4><p class="wrong">The correct answer is "' + questions[currentQuestionOffset]['correct_answer'] + '"</p>');
+                    $('#answer-feedback').html('<p class="wrong">Wrong answer!</p><p class="wrong">The correct answer is "' + questions[currentQuestionOffset]['correct_answer'] + '"</p>');
                     return true;
                 }
-                $('#answer-feedback').html('<h4 class="correct">Correct!</h4>');
+                $('#answer-feedback').html('<p class="correct">Correct!</p>');
             }
 
             if (studyMode) {
                 if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
-                    $('#answer-feedback').html('<h4 class="wrong">Wrong answer!</h4>');
+                    $('#answer-feedback').html('<p class="wrong">Wrong answer!</p>');
                     return false;
                 }
-                $('#answer-feedback').html("<h4>&nbsp;</h4>");
+                $('#answer-feedback').html("<p>&nbsp;</p>");
             }
             selectedAnswers[currentQuestionOffset] = answer;
             return true;
@@ -328,7 +331,7 @@
             $('#quiz-summary').hide();
             $('#quiz-options').show();
             $('#time-left').hide();
-            $('#answer-feedback').html("<h4>&nbsp;</h4>");
+            $('#answer-feedback').html("<p>&nbsp;</p>");
         }
 
         function getFiltersSelected() {
