@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <meta charset="UTF-8">
+    <title>EPA 608 Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <style>
+        .answers-div label {
+            display: inline;
+        }
+        .radius {
+            border-radius: 3px;
+        }
+        .subdued-text {
+            color: #515151;
+            font-size: 0.7em;
+            line-height: 3;
+        }
+        #answer-feedback {
+            color: #801010;
+        }
+        .answers-div input {
+            margin: 1px;
+        }
+        .menu a {
+            padding: 0.2rem 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-x grid-padding-x">
+            <div class="large-12 cell">
+                <h1>EPA 608 Quiz</h1>
+                <ul class="menu">
+                    <li><a href="#" class="new-quiz-button">New Quiz</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="grid-x grid-padding-x">
+
+            <div class="large-1 medium-1 cell">
+            </div>
+            <div class="large-10 medium-10 cell">
+                <div class="grid-x grid-padding-x">
+                    <div class="large-12 cell" style="display: hidden">
+                        <h2 id="time-left" class="text-center countdown"></h2>
+                    </div>
+                </div>
+                <form id="question-form" style="display: hidden">
+                    <div class="grid-x grid-padding-x">
+                        <div class="large-12 cell">
+                            <span class="subdued-text" id="questionType">Question</span>
+                            <p id="question">Who does number 2 work for?</p>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-padding-x">
+                        <div class="large-12 cell answers-div">
+                            <div>
+                                <input type="radio" name="answer" value="0" id="A"><label id="answerA" for="A">Dr. Evil</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="answer" value="1" id="B"><label id="answerB" for="B">Austin Powers</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="answer" value="2" id="C"><label id="answerC" for="C">Nobody</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="answer" value="3" id="D"><label id="answerD" for="D">Number One</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="grid-x grid-padding-x">
+                        <div class="large-12 cell">
+                            <h4 class="text-center" id="answer-feedback"></h4>
+                            <div class="expanded button-group">
+                                <a href="#" class="button radius next-prev" id="next">Next <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <p class="text-center" id="question-number"></p>
+                            <div class="button-group">
+                                <a href="#" class="alert button radius next-prev clear" id="prev"><i class="fas fa-arrow-left"></i> Prev</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div id="quiz-options">
+                    <h5>Select quiz mode</h5>
+                    <div class="filter-type">
+                        <span>
+                            <input type="checkbox" name="include-core" id="include-core" checked="checked">
+                            <label for="include-core">CORE</label>
+                        </span>
+                        <span>
+                            <input type="checkbox" name="include-type1" id="include-type1" checked="checked">
+                            <label for="include-type1">Type I</label>
+                        </span>
+                        <span>
+                            <input type="checkbox" name="include-type2" id="include-type2" checked="checked">
+                            <label for="include-type2">TYPE II</label>
+                        </span>
+                        <span>
+                            <input type="checkbox" name="include-type3" id="include-type3" checked="checked">
+                            <label for="include-type3">TYPE III</label>
+                        </span>
+                    </div>
+                    <a href="#" class="button radius" id="new-quiz-study">Study Mode</a>
+                    <a href="#" class="success button radius" id="new-quiz-test">Test Mode</a>
+                </div>
+                <div id="quiz-summary" style="display: hidden">
+                    <p id="quiz-summary-text"></p>
+                    <a href="#" id="review-questions" class="button radius">Review Questions</a>
+                    <a href="#" class="success button new-quiz-button radius">Start New Quiz</a>
+                </div>
+            </div>
+            <div class="large-1 medium-1 cell">
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/foundation.min.js"></script>
+    <script src="epa_questions_db.js"></script>
+    <script language="javascript" type="text/javascript">
+
+        var currentQuestionOffset = -1;
+        var selectedAnswers = [];
+        var questions = [];
+        var studyMode = false;
+        var timer;
+        var secondsLeft = 0;
+        var secondsElapsed = 0;
+        var reviewMode = false;
+
+
+
+        function printTimeLeft() {
+            var hours = Math.floor(secondsLeft / 3600);
+            var minutes = Math.floor(secondsLeft / 60) % 60;
+            var seconds = secondsLeft % 60;
+            var formatStr = "";
+            if (hours > 0) {
+                formatStr = hours + ":";
+            }
+            if (hours > 0 || minutes > 0) {
+                formatStr += minutes.toString().padStart(2, '0') + ":";
+            }
+            formatStr += seconds.toString().padStart(2, '0');
+            $('#time-left').text(formatStr);
+        }
+
+        function checkTimeLeft() {
+            secondsLeft -= 1;
+            secondsElapsed += 1;
+            printTimeLeft();
+            if (secondsLeft == 0) {
+                alert("You ran out of time!");
+                gradeQuestions();
+                clearInterval(timer);
+                return;
+            }
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timer);
+            secondsLeft = seconds;
+            secondsElapsed = 0;
+            printTimeLeft();
+            timer = setInterval(checkTimeLeft, 1000);
+        }
+
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        }
+
+        function setQuestion(offset) {
+            $("input[name=answer]").each(function(val) {
+                $(this).prop('checked', false);
+            });
+            currentQuestionOffset = offset;
+            var questionObj = questions[offset];
+            $('#questionType').text(questionObj['type'] + " Question");
+            $('#question').text(questionObj['question']);
+            $('#answerA').text(questionObj['answers'][0]);
+            $('#answerB').text(questionObj['answers'][1]);
+            $('#answerC').text(questionObj['answers'][2]);
+            $('#answerD').text(questionObj['answers'][3]);
+            $('#question-number').text("Question number " + (offset+1) + " of " + questions.length);
+            if (selectedAnswers.length > offset) {
+                switch (selectedAnswers[offset]) {
+                    case '0':
+                        $('#A').prop('checked', true);
+                        break;
+                    case '1':
+                        $('#B').prop('checked', true);
+                        break;
+                    case '2':
+                        $('#C').prop('checked', true);
+                        break;
+                    case '3':
+                        $('#D').prop('checked', true);
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+            if (reviewMode) {
+                $("input[name=answer]").each(function(val) {
+                    $(this).prop('disabled', true);
+                });
+                checkAnswer(offset);
+            } else {
+                $("input[name=answer]").each(function(val) {
+                    $(this).prop('disabled', false);
+                });
+            }
+            $("#question-form").show();
+            $('#quiz-summary').hide();
+            $('#quiz-options').hide();
+        }
+
+        function isAnswerCorrect(question, offset) {
+            if (question['correct_answer'] !== question['answers'][offset]) {
+                return false;
+            }
+            return true;
+        }
+
+        function checkAnswer() {
+            var answer = $('input[name=answer]:checked').val();
+            if (answer == undefined) {
+                alert("Please select an answer.");
+                return false;
+            }
+
+            if (reviewMode) {
+                if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
+                    $('#answer-feedback').text("Wrong answer! The correct answer was '" + questions[currentQuestionOffset]['correct_answer'] + "'");
+                    return true;
+                }
+                $('#answer-feedback').text("Correct!");
+            }
+
+            if (studyMode) {
+                if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
+                    $('#answer-feedback').text("Wrong answer!");
+                    return false;
+                }
+                $('#answer-feedback').text("");
+            }
+            selectedAnswers[currentQuestionOffset] = answer;
+            return true;
+        }
+
+        function gradeQuestions() {
+            // if (selectedAnswers.length < questions.length) {
+            //     alert("Error: You did not answer all the questions");
+            //     return;
+            // }
+            $('#time-left').hide();
+            clearInterval(timer);
+            var numCorrect = 0;
+            for (var i = 0; i < questions.length; i++) {
+                if (isAnswerCorrect(questions[i], selectedAnswers[i])) {
+                    numCorrect += 1;
+                }
+            }
+            var scorePercentage = Math.round(numCorrect/questions.length*1000.0)/10.0;
+            $('#quiz-summary-text').text("You got " + numCorrect + " out of " + questions.length + " correct (" + scorePercentage + "%)");
+            $("#question-form").hide();
+            $('#quiz-summary').show();
+            $('#quiz-options').hide();
+        }
+
+        function selectQuestions(max=-1, randomize_questions=true, randomize_answers=true, typesAllowed=["CORE", "Type I", "Type II", "Type III"]) {
+            questions = [];
+            for (var i = 0; i < questionsImport.length; i++) {
+                if (typesAllowed.includes(questionsImport[i]['type'])) {
+                    questions.push(questionsImport[i]);
+                }
+            };
+            if (randomize_questions) {
+                questions = shuffle(questions);
+            }
+            if (max > 0) {
+                questions = questions.slice(0, max);
+            }
+
+            /* TODO: fix answers after randomizing so that answers like, 'both "a" and "b"'
+               still point to the same answers as before. Perhaps keep track of the answers before shuffling, then regex \"[a-cA-B]\" and swap the letter with the new
+               letter of the answer. */
+            if (randomize_answers) {
+                for (var i = 0; i < questions.length; i++) {
+                    questions[i]['answers'] = shuffle(questions[i]['answers']);
+                }
+            }
+            return questions;
+        }
+
+        function newQuiz() {
+            clearInterval(timer);
+            $("#question-form").hide();
+            $('#quiz-summary').hide();
+            $('#quiz-options').show();
+            $('#time-left').hide();
+            $('#answer-feedback').text("");
+        }
+
+        function getFiltersSelected() {
+            var filters = []
+            if ($('input[name=include-core]').is(':checked')) {
+                filters.push("CORE");
+            }
+            if ($('input[name=include-type1]').is(':checked')) {
+                filters.push("Type I");
+            }
+            if ($('input[name=include-type2]').is(':checked')) {
+                filters.push("Type II");
+            }
+            if ($('input[name=include-type3]').is(':checked')) {
+                filters.push("Type III");
+            }
+            return filters;
+        }
+
+        function anyFiltersSelected() {
+            return ($('input[name=include-core]').is(':checked') ||
+                $('input[name=include-type1]').is(':checked') ||
+                $('input[name=include-type2]').is(':checked') ||
+                $('input[name=include-type3]').is(':checked'))
+        }
+
+        function newQuizTest() {
+            if (!anyFiltersSelected()) {
+                alert("You must select one or more type of questions (CORE, Type I, Type II, Type III)");
+                return;
+            }
+            var selectedTypes = getFiltersSelected();
+            studyMode = false;
+            reviewMode = false;
+            currentQuestionOffset = 0;
+            selectedQuestions = [];
+            selectedAnswers = [];
+            selectedTypes.forEach(element => {
+                selectQuestions(25, true, false, [element]);
+                selectedQuestions.push.apply(selectedQuestions, questions)
+            });
+            var timerSeconds = 60 * 30 * selectedTypes.length;
+            questions = selectedQuestions;
+            setQuestion(currentQuestionOffset);
+            $('#time-left').show();
+            startTimer(timerSeconds);
+        }
+
+        function newQuizStudy() {
+            if (!anyFiltersSelected()) {
+                alert("You must select one or more type of questions (CORE, Type I, Type II, Type III)");
+                return;
+            }
+            var selectedTypes = getFiltersSelected();
+            studyMode = true;
+            reviewMode = false;
+            selectedAnswers = [];
+            currentQuestionOffset = 0;
+            selectQuestions(-1, true, false, selectedTypes);
+            setQuestion(currentQuestionOffset);
+        }
+
+        $(document).ready(function(){
+            newQuiz();
+            $('#prev').click(function () {
+                currentQuestionOffset -= 1;
+                if (currentQuestionOffset < 0) {
+                    currentQuestionOffset = 0;
+                }
+                setQuestion(currentQuestionOffset);
+            });
+            $('#next').click(function () {
+                if (checkAnswer()) {
+                    currentQuestionOffset += 1;
+                    if (currentQuestionOffset < questions.length) {
+                        setQuestion(currentQuestionOffset);
+                    } else {
+                        gradeQuestions();
+                    }
+                }
+            });
+
+            $('#review-questions').click(function() {
+                reviewMode = true;
+                setQuestion(0);
+            });
+            $('.new-quiz-button').click(function() {
+                newQuiz();
+            });
+            $('#new-quiz-test').click(function() {
+                newQuizTest();
+            });
+            $('#new-quiz-study').click(function() {
+                newQuizStudy();
+            });
+        });
+    </script>
+</body>
+</html>
