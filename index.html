@@ -58,7 +58,7 @@
     <div class="grid-container">
         <div class="grid-x grid-padding-x">
             <div class="large-12 cell">
-                <h2 class="title">EPA 608 Quiz</h2> <span class="menu"><a href="#" class="radius button new-quiz-button">New Quiz</a></span>
+                <h4 class="title">EPA 608 Quiz</h4> <span class="menu"><a href="#" class="new-quiz-button">New Quiz</a></span>
             </div>
         </div>
         <hr />
@@ -96,7 +96,7 @@
                     </div>
                     <div class="grid-x grid-padding-x">
                         <div class="large-12 cell">
-                            <div class="text-center" id="answer-feedback"></div>
+                            <div class="text-center" id="answer-feedback"><h4>&nbsp;</h4></div>
                             <div class="expanded button-group">
                                 <a href="#" class="button radius next-prev" id="next">Next <i class="fas fa-arrow-right"></i></a>
                             </div>
@@ -275,7 +275,7 @@
                     $('#answer-feedback').html('<h4 class="wrong">Wrong answer!</h4>');
                     return false;
                 }
-                $('#answer-feedback').html("");
+                $('#answer-feedback').html("<h4>&nbsp;</h4>");
             }
             selectedAnswers[currentQuestionOffset] = answer;
             return true;
@@ -328,7 +328,7 @@
             $('#quiz-summary').hide();
             $('#quiz-options').show();
             $('#time-left').hide();
-            $('#answer-feedback').text("");
+            $('#answer-feedback').html("<h4>&nbsp;</h4>");
         }
 
         function getFiltersSelected() {
