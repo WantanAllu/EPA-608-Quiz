@@ -284,7 +284,7 @@
 
         function checkAnswer() {
             var answer = $('input[name=answer]:checked').val();
-            if (answer == undefined) {
+            if (answer == undefined && !reviewMode) {
                 alert("Please select an answer.");
                 return false;
             }
