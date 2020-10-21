@@ -251,7 +251,6 @@
                         $('#D').prop('checked', true);
                         break;
                 }
-                //checkAnswer(offset);
             }
             if (reviewMode) {
                 $("input[name=answer]").each(function(val) {
@@ -422,6 +421,11 @@
 
         $(document).ready(function(){
             newQuiz();
+            $('input[type=radio][name=answer]').change(function() {
+                clearAnswerFeedback();
+                var answer = $('input[name=answer]:checked').val();
+                selectedAnswers[currentQuestionOffset] = answer;
+            });
             $('#prev').click(function () {
                 currentQuestionOffset -= 1;
                 if (currentQuestionOffset < 0) {
@@ -429,6 +433,7 @@
                 }
                 clearAnswerFeedback();
                 setQuestion(currentQuestionOffset);
+                return false;
             });
             $('#next').click(function () {
                 if (checkAnswer()) {
@@ -439,24 +444,24 @@
                         gradeQuestions();
                     }
                 }
-            });
-            $('input[type=radio][name=answer]').change(function() {
-                clearAnswerFeedback();
-                var answer = $('input[name=answer]:checked').val();
-                selectedAnswers[currentQuestionOffset] = answer;
+                return false;
             });
             $('#review-questions').click(function() {
                 reviewMode = true;
                 setQuestion(0);
+                return false;
             });
             $('.new-quiz-button').click(function() {
                 newQuiz();
+                return false;
             });
             $('#new-quiz-test').click(function() {
                 newQuizTest();
+                return false;
             });
             $('#new-quiz-study').click(function() {
                 newQuizStudy();
+                return false;
             });
         });
         /*Moved questions from separate file to inline see: epa_questions_db.js*/
