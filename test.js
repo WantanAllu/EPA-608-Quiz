@@ -300,7 +300,17 @@ function newQuizBank() {
     setQuestion(currentQuestionOffset);
 }
 
+function tryReadHashShare() {
+    var hash = window.location.hash.substr(1);
+    console.log(hash);
+    if (hash.length == 96) {
+        loadShareCode(hash);
+    }
+    history.replaceState(null, null, ' ');
+}
+
 $(document).ready(function(){
+    tryReadHashShare();
     updateBankedQuestionsNum();
     newQuiz();
     $('input[type=radio][name=answer]').change(function() {
@@ -390,12 +400,15 @@ $(document).ready(function(){
         return false;
     });
     $('#import-share').click(function() {
-        loadShareCode($('#shareCodeImport').val());
+        if (loadShareCode($('#shareCodeImport').val())) {
+            alert("Bank import success!");
+        }
         return false;
     });
 });
 
 function loadShareCode(code) {
+    code = code.split("#").pop();
     var binary = '';
     if (code.length < 96) {
         alert("Error: Invalid share code. Make sure you copied it correctly. (Code too short)");
@@ -427,17 +440,14 @@ function loadShareCode(code) {
         bankSaveId(id);
     });
     updateBankSummary();
-    alert("Bank import success!");
+    return true;
 }
 
 function createShareCode() {
     var bankedQuestions = getBankedQuestions();
     var ids = bankedQuestions.map(obj => obj.id).sort();
-
     var byteLen = Math.ceil(questionsImport.length/8);
-
     var codeBytes = new Uint8Array(byteLen).fill(0);
-
     for (var i = 0; i < questionsImport.length; i++) {
         var offset = Math.floor(i/8);
         var mod = i%8;
@@ -449,11 +459,9 @@ function createShareCode() {
     for (var i = 0; i < byteLen; i++) {
         binary += String.fromCharCode(codeBytes[ i ]);
     }
-
     var shareCode = btoa(binary);
-    //console.log(shareCode);
-    //loadShareCode(shareCode);
-    $('#shareCodeExport').val(shareCode);
+    var href = window.location.href.split("#")[0] + "#" + shareCode;
+    $('#shareCodeExport').val(href);
 }
 
 function updateBankedQuestionsNum() {
@@ -485,6 +493,7 @@ function updateBankSummary() {
         return false;
     });
     createShareCode();
+    updateBankedQuestionsNum();
 }
 
 function bankClearBank() {
@@ -506,7 +515,6 @@ function bankClearBank() {
         localStorage.setItem(key, item);
     }
     updateBankSummary();
-    updateBankedQuestionsNum();
 }
 
 function bankClearStat() {
@@ -529,13 +537,11 @@ function bankClearStat() {
         localStorage.setItem(key, item);
     }
     updateBankSummary();
-    updateBankedQuestionsNum();
 }
 
 function bankClearAll() {
     localStorage.clear();
     updateBankSummary();
-    updateBankedQuestionsNum();
 }
 
 function bankTrack(id, correct) {
