@@ -379,7 +379,82 @@ $(document).ready(function(){
         updateBankedQuestionsNum();
         return false;
     });
+    $('#bank-share-btn').click(function() {
+        createShareCode();
+        return false;
+    });
+    $('#copy-share').click(function() {
+        $('#shareCodeExport').focus();
+        $('#shareCodeExport')[0].setSelectionRange(0, $('#shareCodeExport').val().length);
+        document.execCommand("copy");
+        return false;
+    });
+    $('#import-share').click(function() {
+        loadShareCode($('#shareCodeImport').val());
+        return false;
+    });
 });
+
+function loadShareCode(code) {
+    var binary = '';
+    if (code.length < 96) {
+        alert("Error: Invalid share code. Make sure you copied it correctly. (Code too short)");
+        return false;
+    }
+    try {
+        binary = atob(code);
+    } catch (e) {
+        alert("Error: Failed to parse share code. Make sure you copied it correctly.");
+        return false;
+    }
+
+    var len = binary.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    var ids = [];
+    for (var i = 0; i < questionsImport.length; i++) {
+        var offset = Math.floor(i/8);
+        var mod = i%8;
+        if ((bytes[offset] >> mod) & 1 == 1) {
+            ids.push(i);
+        }
+    }
+
+    ids.forEach(id => {
+        bankSaveId(id);
+    });
+    updateBankSummary();
+    alert("Bank import success!");
+}
+
+function createShareCode() {
+    var bankedQuestions = getBankedQuestions();
+    var ids = bankedQuestions.map(obj => obj.id).sort();
+
+    var byteLen = Math.ceil(questionsImport.length/8);
+
+    var codeBytes = new Uint8Array(byteLen).fill(0);
+
+    for (var i = 0; i < questionsImport.length; i++) {
+        var offset = Math.floor(i/8);
+        var mod = i%8;
+        if (ids.includes(i)) {
+            codeBytes[offset] += 1 << mod;
+        }
+    }
+    var binary = '';
+    for (var i = 0; i < byteLen; i++) {
+        binary += String.fromCharCode(codeBytes[ i ]);
+    }
+
+    var shareCode = btoa(binary);
+    //console.log(shareCode);
+    //loadShareCode(shareCode);
+    $('#shareCodeExport').val(shareCode);
+}
 
 function updateBankedQuestionsNum() {
     $('.banked-questions-num').text(getBankedQuestions().length);
@@ -409,6 +484,7 @@ function updateBankSummary() {
         updateBankSummary();
         return false;
     });
+    createShareCode();
 }
 
 function bankClearBank() {
@@ -551,7 +627,7 @@ function getBankedQuestions() {
         } catch (e) {
             continue;
         }
-        if (item["saved"] && item["id"] && item["id"] in questionsImport) {
+        if (item["saved"] && item["id"] in questionsImport) {
             var questionObj = questionsImport[item["id"]];
             questionObj['id'] = item['id'];
 
