@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>    
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>EPA 608 Quiz</title>
@@ -125,6 +125,7 @@
         }
         #shareCodeExport, #shareCodeImport {
             font-size: 0.5rem;
+            margin-bottom: 0.2rem;
         }
     </style>
 </head>
@@ -242,13 +243,17 @@
         </div>
     </div>
     <div class="reveal" id="shareCodeModal" data-reveal>
-        <h1>Share code</h1>
+        <h4>Share code</h4>
         <div class="subdued-text">Here is your generated share code</div>
         <input type="text" id="shareCodeExport" readonly></input>
-        <a href="javascript:void(0)" class="small success button radius" id="copy-share">Copy</a>
+        <div class="tiny expanded button-group">
+            <a href="javascript:void(0)" class="small success button radius" id="copy-share">Copy</a>
+        </div>
         <div class="subdued-text">Enter a share code below to import a bank of questions</div>
         <input type="text" id="shareCodeImport"></input>
-        <a href="javascript:void(0)" class="small success button radius" id="import-share">Import</a>
+        <div class="tiny expanded button-group">
+            <a href="javascript:void(0)" class="small success button radius" id="import-share">Import</a>
+        </div>
         <button class="close-button" data-close aria-label="Close modal" type="button">
             <span aria-hidden="true">&times;</span>
         </button>
