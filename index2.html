@@ -89,12 +89,18 @@
             margin-left: 0.2rem;
             margin-right: 0.4rem;
         }
-        #quiz-options {
-            margin-top: 0.4rem;
+        hr {
+            margin-bottom: 0.4rem;
         }
-        #quiz-options h3 {
+        h3 {
             margin-bottom: 0;
             line-height: 1.1;
+        }
+        .next-prev {
+            margin-bottom: 0;
+        }
+        #time-left {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -112,10 +118,13 @@
             <div class="large-10 cell">
                 <div class="grid-x grid-padding-x">
                     <div class="large-12 cell" style="display: hidden">
-                        <h2 id="time-left" class="text-center countdown"></h2>
+                        <h4 id="time-left" class="text-center countdown"></h4>
                     </div>
                 </div>
                 <form id="question-form" style="display: hidden">
+
+                
+                <div class="small callout">
                     <div class="grid-x grid-padding-x">
                         <div class="large-12 cell">
                             <span class="subdued-text" id="questionType">Question</span>
@@ -149,6 +158,7 @@
                             <a href="javascript:void(0)" class="small alert button radius next-prev clear float-right" id="save"><i class="fas fa-save"></i> Save</a>
                         </div>
                     </div>
+                </div>
                 </form>
                 <div id="quiz-options">
                     <div class="small callout">
@@ -195,19 +205,21 @@
                     <a href="javascript:void(0)" class="success button new-quiz-button radius">Start New Quiz</a>
                 </div>
                 <div id="edit-bank-summary" style="display: none">
-                    <h3>Question Bank</h3>
-                    <div class="subdued-text">You have <a href="javascript:void(0)" class="banked-questions-num">0</a> question(s) banked</div>
-                    <br>
-                    <div class="subdued-text">Questions that you answer wrong will show up in this list automatically. You can also add questions to this list by clicking "save" in the bottom right when looking at a questions when taking a quiz.</div>
-                    <br>
-                    <div class="small button-group align-justify">
-                        <a href="javascript:void(0)" class="button radius new-quiz-button"><i class="fas fa-arrow-left"></i> New Quiz</a>
-                        <a href="javascript:void(0)" class="success button radius" id="bank-refresh-btn"><i class="fas fa-sync"></i> Refresh</a>
-                    </div>
-                    <div class="small button-group">
-                        <a href="javascript:void(0)" class="alert button radius" id="clear-bank-btn"><i class="fas fa-eraser"></i> Clear Bank</a>
-                        <a href="javascript:void(0)" class="alert button radius" id="clear-stat-btn"><i class="fas fa-chart-line"></i> Clear Stats</a>
-                        <a href="javascript:void(0)" class="alert button radius" id="clear-all-btn"><i class="fas fa-trash"></i> Clear All</a>
+                    <div class="small callout">
+                        <h3>Question Bank</h3>
+                        <div class="subdued-text">You have <a href="javascript:void(0)" class="banked-questions-num">0</a> question(s) banked</div>
+                        <br>
+                        <div class="subdued-text">Questions that you answer wrong will show up in this list automatically. You can also add questions to this list by clicking "save" in the bottom right when looking at a questions when taking a quiz.</div>
+                        <br>
+                        <div class="small button-group align-justify">
+                            <a href="javascript:void(0)" class="button radius new-quiz-button"><i class="fas fa-arrow-left"></i> New Quiz</a>
+                            <a href="javascript:void(0)" class="success button radius" id="bank-refresh-btn"><i class="fas fa-sync"></i> Refresh</a>
+                        </div>
+                        <div class="small button-group">
+                            <a href="javascript:void(0)" class="alert button radius" id="clear-bank-btn"><i class="fas fa-eraser"></i> Clear Bank</a>
+                            <a href="javascript:void(0)" class="alert button radius" id="clear-stat-btn"><i class="fas fa-chart-line"></i> Clear Stats</a>
+                            <a href="javascript:void(0)" class="alert button radius" id="clear-all-btn"><i class="fas fa-trash"></i> Clear All</a>
+                        </div>
                     </div>
                     <div id="banked-questions">
                     </div>
