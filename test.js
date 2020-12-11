@@ -391,7 +391,7 @@ function updateBankSummary() {
         }
         $('#banked-questions').append('<div class="banked-question small callout"><div class="subdued-text">' + '#' + q["id"] + ' (' + q['type'] + ') Answered Correct ' + correctPercent + '% (' +
                 q["numCorrect"] + '/' + q["numAnswered"] + ')' + '</div>' + q["question"] +
-                '<a href="javascript:void(0)" class="remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div>');
+                '<a href="javascript:void(0)" class="float-right remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div>');
     });
 
     $('.remove-q').click(function() {
