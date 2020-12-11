@@ -488,6 +488,13 @@ function getBankedQuestions() {
         if (item["saved"] && item["id"] && item["id"] in questionsImport) {
             var questionObj = questionsImport[item["id"]];
             questionObj['id'] = item['id'];
+            
+            if (typeof item["numCorrect"] !== "number") {
+                item["numCorrect"] = 0;
+            }
+            if (typeof item["numAnswered"] !== "number") {
+                item["numAnswered"] = 0;
+            }
             questionObj['numCorrect'] = item['numCorrect'];
             questionObj['numAnswered'] = item['numAnswered'];
             bankedQuestions.push(questionObj);
