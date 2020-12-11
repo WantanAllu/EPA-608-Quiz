@@ -160,9 +160,13 @@ function gradeQuestions() {
     for (var i = 0; i < questions.length; i++) {
         if (isAnswerCorrect(questions[i], selectedAnswers[i])) {
             numCorrect += 1;
-            bankTrack(questions[i]["id"], true);
+            if (!studyMode) {
+                bankTrack(questions[i]["id"], true);
+            }
         } else {
-            bankTrack(questions[i]["id"], false);
+            if (!studyMode) {
+                bankTrack(questions[i]["id"], false);
+            }
             bankSaveId(questions[i]["id"]);
         }
     }
