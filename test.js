@@ -19,7 +19,7 @@ function printTimeLeft() {
         formatStr += minutes.toString().padStart(2, '0') + ":";
     }
     formatStr += seconds.toString().padStart(2, '0');
-    $('#time-left').text(formatStr);
+    $('#time-left').html('<i class="far fa-clock fa-xs" style="margin-right:.17em;"></i>' + formatStr);
 }
 
 function checkTimeLeft() {
