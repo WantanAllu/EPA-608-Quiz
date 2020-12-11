@@ -366,7 +366,7 @@ function updateBankSummary() {
     var bankedQuestions = getBankedQuestions();
     $('#banked-questions').html('');
     bankedQuestions.forEach(q => {
-        $('#banked-questions').append('<div class="banked-question">' + '#' + q["id"] + ' (' + q['type'] + ') ' + q["question"] + '<a href="javascript:void(0)" class="remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div><br>');
+        $('#banked-questions').append('<div class="banked-question small callout">' + '#' + q["id"] + ' (' + q['type'] + ') ' + q["question"] + '<a href="javascript:void(0)" class="remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div>');
     });
 
     $('.remove-q').click(function() {
