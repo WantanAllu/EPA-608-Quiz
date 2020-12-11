@@ -283,6 +283,8 @@ function newQuizBank() {
         return;
     }
     questions = bankedQuestions;
+    // shuffle questions
+    questions = shuffle(questions);
     currentQuestionOffset = 0;
     selectedAnswers = [];
     studyMode = true;
