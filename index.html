@@ -89,6 +89,13 @@
             margin-left: 0.2rem;
             margin-right: 0.4rem;
         }
+        #quiz-options {
+            margin-top: 0.4rem;
+        }
+        #quiz-options h3 {
+            margin-bottom: 0;
+            line-height: 1.1;
+        }
     </style>
 </head>
 <body>
@@ -144,37 +151,43 @@
                     </div>
                 </form>
                 <div id="quiz-options">
-                    <h3>New Quiz</h3>
-                    <div class="subdued-text">Select the question types you want to be quized on</div>
-                    <div class="filter-type">
-                        <span>
-                            <input type="checkbox" name="include-core" id="include-core" checked="checked">
-                            <label for="include-core">CORE</label>
-                        </span>
-                        <span>
-                            <input type="checkbox" name="include-type1" id="include-type1" checked="checked">
-                            <label for="include-type1">Type I</label>
-                        </span>
-                        <span>
-                            <input type="checkbox" name="include-type2" id="include-type2" checked="checked">
-                            <label for="include-type2">TYPE II</label>
-                        </span>
-                        <span>
-                            <input type="checkbox" name="include-type3" id="include-type3" checked="checked">
-                            <label for="include-type3">TYPE III</label>
-                        </span>
+                    <div class="small callout">
+                        <h3>New Quiz</h3>
+                        <div class="subdued-text">Select the question types you want to be quized on</div>
+                        <div class="filter-type">
+                            <span>
+                                <input type="checkbox" name="include-core" id="include-core" checked="checked">
+                                <label for="include-core">CORE</label>
+                            </span>
+                            <span>
+                                <input type="checkbox" name="include-type1" id="include-type1" checked="checked">
+                                <label for="include-type1">Type I</label>
+                            </span>
+                            <span>
+                                <input type="checkbox" name="include-type2" id="include-type2" checked="checked">
+                                <label for="include-type2">TYPE II</label>
+                            </span>
+                            <span>
+                                <input type="checkbox" name="include-type3" id="include-type3" checked="checked">
+                                <label for="include-type3">TYPE III</label>
+                            </span>
+                        </div>
+                        <div class="small button-group">
+                            <a href="javascript:void(0)" class="button radius" id="new-quiz-study">Study Mode</a>
+                            <a href="javascript:void(0)" class="success button radius" id="new-quiz-test">Test Mode</a>
+                        </div>
                     </div>
-                    <a href="javascript:void(0)" class="button radius" id="new-quiz-study">Study Mode</a>
-                    <a href="javascript:void(0)" class="success button radius" id="new-quiz-test">Test Mode</a>
-                    <br>
-                    <br>
-                    <h3>Question Bank</h3>
-                    <div class="subdued-text">You have <a href="javascript:void(0)" class="banked-questions-num">0</a> question(s) banked</div>
-                    <br>
-                    <div class="subdued-text" style="margin-bottom: .6rem">Study the questions that you have saved or answered incorrectly</div>
-                    <br>
-                    <a href="javascript:void(0)" class="button radius" id="new-quiz-bank">Study Banked</a>
-                    <a href="javascript:void(0)" class="success button radius" id="edit-quiz-bank">Edit Banked Questions</a>
+                    <div class="small callout">
+                        <h3>Question Bank</h3>
+                        <div class="subdued-text">You have <a href="javascript:void(0)" class="banked-questions-num">0</a> question(s) banked</div>
+                        <br>
+                        <div class="subdued-text" style="margin-bottom: .6rem">Study the questions that you have saved or answered incorrectly</div>
+                        <br>
+                        <div class="small button-group">
+                            <a href="javascript:void(0)" class="button radius" id="new-quiz-bank">Study Banked</a>
+                            <a href="javascript:void(0)" class="success button radius" id="edit-quiz-bank">Edit Banked Questions</a>
+                        </div>
+                    </div>
                 </div>
                 <div id="quiz-summary" style="display: none">
                     <p id="quiz-summary-text"></p>
