@@ -111,6 +111,12 @@
         .margin-at-top {
             height: 1rem;
         }
+        #shareCodeExport[readonly] {
+            cursor: text;
+        }
+        #shareCodeExport, #shareCodeImport {
+            font-size: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -208,8 +214,9 @@
                     <br>
                     <div class="subdued-text">Questions that you answer wrong will show up in this list automatically. You can also add questions to this list by clicking "save" in the bottom right when looking at a questions when taking a quiz.</div>
                     <br>
-                    <div class="small button-group align-justify">
+                    <div class="small button-group">
                         <a href="javascript:void(0)" class="button radius new-quiz-button"><i class="fas fa-arrow-left"></i> New Quiz</a>
+                        <a class="small success button radius" data-open="shareCodeModal"><i class="fas fa-share-square"></i> Share Code</a>
                         <a href="javascript:void(0)" class="success button radius" id="bank-refresh-btn"><i class="fas fa-sync"></i> Refresh</a>
                     </div>
                     <div class="small button-group">
@@ -225,8 +232,25 @@
             </div>
         </div>
     </div>
+    <div class="reveal" id="shareCodeModal" data-reveal>
+        <h1>Share code</h1>
+        <div class="subdued-text">Here is your generated share code</div>
+        <input type="text" id="shareCodeExport" readonly></input>
+        <a href="javascript:void(0)" class="small success button radius" id="copy-share">Copy</a>
+        <div class="subdued-text">Enter a share code below to import a bank of questions</div>
+        <input type="text" id="shareCodeImport"></input>
+        <a href="javascript:void(0)" class="small success button radius" id="import-share">Import</a>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <script src="jquery-3.5.1.min.js"></script>
     <script src="foundation.min.js"></script>
     <script src="test.js"></script>
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function() {
+          $(document).foundation();
+        })
+    </script>
 </body>
 </html>
