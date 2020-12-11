@@ -142,10 +142,12 @@ function checkAnswer() {
         if (!isAnswerCorrect(questions[currentQuestionOffset], answer)) {
             setAnswerFeedback('<p class="wrong">Wrong answer!</p>');
             selectedAnswers[currentQuestionOffset] = answer;
+            bankTrack(questions[currentQuestionOffset]["id"], false);
             bankSaveId(questions[currentQuestionOffset]["id"]);
             return false;
         }
         clearAnswerFeedback();
+        bankTrack(questions[currentQuestionOffset]["id"], true);
     }
     selectedAnswers[currentQuestionOffset] = answer;
     return true;
@@ -158,7 +160,9 @@ function gradeQuestions() {
     for (var i = 0; i < questions.length; i++) {
         if (isAnswerCorrect(questions[i], selectedAnswers[i])) {
             numCorrect += 1;
+            bankTrack(questions[i]["id"], true);
         } else {
+            bankTrack(questions[i]["id"], false);
             bankSaveId(questions[i]["id"]);
         }
     }
@@ -368,7 +372,10 @@ function updateBankSummary() {
     var bankedQuestions = getBankedQuestions();
     $('#banked-questions').html('');
     bankedQuestions.forEach(q => {
-        $('#banked-questions').append('<div class="banked-question small callout">' + '#' + q["id"] + ' (' + q['type'] + ') ' + q["question"] + '<a href="javascript:void(0)" class="remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div>');
+        var correctPercent = Math.round(q['numCorrect']/q['numAnswered']*1000)/10;
+        $('#banked-questions').append('<div class="banked-question small callout"><div class="subdued-text">' + '#' + q["id"] + ' (' + q['type'] + ') Answered Correct ' + correctPercent + '% (' +
+                q["numCorrect"] + '/' + q["numAnswered"] + ')' + '</div>' + q["question"] +
+                '<a href="javascript:void(0)" class="remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div>');
     });
 
     $('.remove-q').click(function() {
@@ -390,13 +397,39 @@ function bankClear() {
 }
 
 function bankTrack(id, correct) {
+    if (!(id in questionsImport)) {
+        console.log("Error: Tried to query bankTrack question " + id + " which is not an index.");
+        return;
+    }
+    var item = localStorage.getItem("q_" + id);
+    try {
+        item = JSON.parse(item);
+    } catch (e) {
+        item = {};
+    }
+    if (item == null) {
+        item = {};
+    }
+    item["id"] = id;
+    if (typeof item["numCorrect"] !== "number") {
+        item["numCorrect"] = 0;
+    }
+    if (typeof item["numAnswered"] !== "number") {
+        item["numAnswered"] = 0;
+    }
+    if (correct) {
+        item["numCorrect"] += 1;
+    }
+    item["numAnswered"] += 1;
 
+    item = JSON.stringify(item);
+    localStorage.setItem("q_" + id, item);
 }
 
 function bankIsSaved(id) {
     if (!(id in questionsImport)) {
         console.log("Error: Tried to query bankIsSaved question " + id + " which is not an index.");
-        return;
+        return false;
     }
     var item = localStorage.getItem("q_" + id);
     try {
@@ -455,6 +488,8 @@ function getBankedQuestions() {
         if (item["saved"] && item["id"] && item["id"] in questionsImport) {
             var questionObj = questionsImport[item["id"]];
             questionObj['id'] = item['id'];
+            questionObj['numCorrect'] = item['numCorrect'];
+            questionObj['numAnswered'] = item['numAnswered'];
             bankedQuestions.push(questionObj);
         }
     };
