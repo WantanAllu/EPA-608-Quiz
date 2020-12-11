@@ -359,7 +359,20 @@ $(document).ready(function(){
         return false;
     });
     $('#clear-bank-btn').click(function() {
-        bankClear();
+        bankClearBank();
+        return false;
+    });
+    $('#clear-stat-btn').click(function() {
+        bankClearStat();
+        return false;
+    });
+    $('#clear-all-btn').click(function() {
+        bankClearAll();
+        return false;
+    });
+    $('#bank-refresh-btn').click(function() {
+        updateBankSummary();
+        updateBankedQuestionsNum();
         return false;
     });
 });
@@ -393,7 +406,52 @@ function updateBankSummary() {
     });
 }
 
-function bankClear() {
+function bankClearBank() {
+    for (var i = 0; i < localStorage.length; i++){
+        var key = localStorage.key(i);
+        if (!key.startsWith("q_")) {
+            continue;
+        }
+        var item = localStorage.getItem(key);
+
+        try {
+            item = JSON.parse(item);
+        } catch (e) {
+            continue;
+        }
+
+        item["saved"] = false;
+        item = JSON.stringify(item);
+        localStorage.setItem(key, item);
+    }
+    updateBankSummary();
+    updateBankedQuestionsNum();
+}
+
+function bankClearStat() {
+    for (var i = 0; i < localStorage.length; i++){
+        var key = localStorage.key(i);
+        if (!key.startsWith("q_")) {
+            continue;
+        }
+        var item = localStorage.getItem(key);
+
+        try {
+            item = JSON.parse(item);
+        } catch (e) {
+            continue;
+        }
+
+        item["numCorrect"] = 0;
+        item["numAnswered"] = 0;
+        item = JSON.stringify(item);
+        localStorage.setItem(key, item);
+    }
+    updateBankSummary();
+    updateBankedQuestionsNum();
+}
+
+function bankClearAll() {
     localStorage.clear();
     updateBankSummary();
     updateBankedQuestionsNum();
@@ -502,7 +560,7 @@ function getBankedQuestions() {
             questionObj['numAnswered'] = item['numAnswered'];
             bankedQuestions.push(questionObj);
         }
-    };
+    }
     return bankedQuestions;
 }
 
