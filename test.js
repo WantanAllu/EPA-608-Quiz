@@ -394,7 +394,7 @@ function updateBankSummary() {
             correctPercent = Math.round(q['numCorrect']/q['numAnswered']*1000)/10;
         }
         $('#banked-questions').append('<div class="banked-question small callout clearfix"><div class="subdued-text">' + '#' + q["id"] + ' (' + q['type'] + ') Answered Correct ' + correctPercent + '% (' +
-                q["numCorrect"] + '/' + q["numAnswered"] + ')' + '<a href="javascript:void(0)" class="float-right remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '">Remove</a></div>' + q["question"] +
+                q["numCorrect"] + '/' + q["numAnswered"] + ')' + '<a href="javascript:void(0)" class="float-right remove-q alert tiny button radius clear" id="remove-q_' + q["id"] + '"><i class="fas fa-minus"></i></a></div>' + q["question"] +
                 '</div>');
     });
 
