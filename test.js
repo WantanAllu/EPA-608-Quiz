@@ -302,7 +302,6 @@ function newQuizBank() {
 
 function tryReadHashShare() {
     var hash = window.location.hash.substr(1);
-    console.log(hash);
     if (hash.length == 96) {
         loadShareCode(hash);
     }
